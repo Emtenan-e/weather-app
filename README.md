@@ -13,3 +13,13 @@ Depending on data from openweathermap.org this app:
 - Interfaces and logic **Flutter & Dart**
 - API to connect to server **HTTP Package**.
 - For data storage **REST API / JSON**.
+
+
+## Requirements 
+- Flutter SDK
+- Internet connection
+- API Key
+
+
+## How to run
+- Create your own API key and add it to the project.
