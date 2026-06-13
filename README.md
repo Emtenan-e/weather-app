@@ -27,6 +27,9 @@ Depending on data from openweathermap.org this app:
 ## Screenshots
 
 ![Search Screen](screenshots/search.gif)
+
 ![Rainy Weather](screenshots/rainy.gif)
-![Snowy Weather](screenshots/snowy.gif)
+
+![Snowy Weather](screenshots/snow.gif)
+
 ![Thunder Weather](screenshots/thunder.gif)
