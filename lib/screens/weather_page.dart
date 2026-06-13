@@ -35,13 +35,20 @@ class _WeatherPageState extends State<WeatherPage> {
     '02n': (WeatherType.cloudyNight, WeatherIcons.night_cloudy),
     '03d': (WeatherType.cloudy, WeatherIcons.day_cloudy_windy),
     '03n': (WeatherType.cloudyNight, WeatherIcons.night_cloudy_windy),
-    '04d': (WeatherType.cloudy,WeatherIcons.day_cloudy_high),
-    '04n': (WeatherType.cloudyNight, WeatherIcons.night_cloudy_high),
+    '04d': (WeatherType.overcast,WeatherIcons.day_cloudy_high),
+    '04n': (WeatherType.overcast, WeatherIcons.night_cloudy_high),
+    '50d': (WeatherType.foggy, WeatherIcons.day_fog),
+    '05n': (WeatherType.foggy, WeatherIcons.night_fog),
     '09d': (WeatherType.lightRainy, WeatherIcons.raindrop),
+    '09n': (WeatherType.lightRainy, WeatherIcons.raindrop),
+    '10d': (WeatherType.heavyRainy, WeatherIcons.day_rain),
+    '10n': (WeatherType.heavyRainy, WeatherIcons.night_alt_rain),
+    '11d': (WeatherType.thunder, WeatherIcons.day_thunderstorm),
+    '11n': (WeatherType.thunder, WeatherIcons.night_thunderstorm),
+    '13d': (WeatherType.lightSnow, WeatherIcons.day_snow),
+    '13n': (WeatherType.lightSnow, WeatherIcons.night_snow),
+    '14n': (WeatherType.middleRainy, WeatherIcons.raindrops),
     '14d': (WeatherType.middleRainy, WeatherIcons.raindrops),
-    '11d': (WeatherType.thunder, WeatherIcons.thunderstorm),
-    '13d': (WeatherType.lightSnow, WeatherIcons.snow),
-    '50d': (WeatherType.foggy, WeatherIcons.fog),
   };
 
   String? feelsDescription ;
@@ -109,6 +116,7 @@ class _WeatherPageState extends State<WeatherPage> {
                   onTap: (){
                     FocusScope.of(context).unfocus();
                     searchController.clear();
+                    listSuggestions.clear();
                   },
                   child: Stack(
                     children:[
@@ -129,10 +137,13 @@ class _WeatherPageState extends State<WeatherPage> {
                               controller: searchController,
                               onSubmitted: (String value) async{
 
+                                //it no text with submitted
                                 if (value.trim().isEmpty) return;
 
+                                //get list of city from service
                                 var list = await _weatherService.citySuggestions(value);
 
+                                //if no suggestion
                                 if(list.isEmpty){
                                   //clear the previous list
                                   setState(() {
@@ -169,9 +180,20 @@ class _WeatherPageState extends State<WeatherPage> {
                                   });
                                   return;
                                 }
+
                                 //get list of exist city
                                 var list = await _weatherService.citySuggestions(value);
+
+                                if (searchController.text.trim().isEmpty) {
+                                  setState(() {
+                                    listSuggestions.clear();
+                                  });
+                                  return;
+                                }
+
                                 setState(() {
+                                  //clear previous suggestions
+                                  listSuggestions.clear();
                                   listSuggestions = list ;
                                 });
                               },
@@ -219,10 +241,25 @@ class _WeatherPageState extends State<WeatherPage> {
                               padding: EdgeInsets.zero,
                               itemCount: listSuggestions.length,
                               itemBuilder:(context,index){
+
                                 final item = listSuggestions[index];
+
                                 return ListTile(
                                   tileColor: Colors.white ,
-                                  title: Text("${item['name']}"),
+                                  title: RichText(
+                                      text: TextSpan(
+                                        children: [
+                                          TextSpan(
+                                            text: "${item['name']}",
+                                            style: TextStyle(fontSize: 13, color: Colors.black,),
+                                          ),
+                                          TextSpan(
+                                            text:  "${item['country']}",
+                                            style: TextStyle(fontSize: 9, color: Colors.grey),
+                                          )
+                                        ]
+                                      )
+                                  ),
                                   onTap: (){
 
                                     //show the data of selected city
@@ -245,18 +282,19 @@ class _WeatherPageState extends State<WeatherPage> {
                               physics: const BouncingScrollPhysics(),
                               child: Column(
                                 children: [
-                                  Row(
-                                    //all to the same line
-                                    crossAxisAlignment: CrossAxisAlignment.baseline,
-                                    textBaseline: TextBaseline.alphabetic,
-                                    //all to the center
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Text("$city",
-                                        style: TextStyle(fontSize: 30,color: Colors.white),),
-                                      Text("${weatherData.country}",
-                                        style: TextStyle(fontSize: 11,color: Colors.white.withOpacity(0.4)),),
-                                    ],
+                                  RichText(
+                                      textAlign: TextAlign.center,
+                                      text: TextSpan(
+                                        style: TextStyle(color: Colors.white),
+                                        children: [
+                                          TextSpan(
+                                            text: "$city",
+                                            style: TextStyle(fontSize: 30,color: Colors.white),),
+                                          TextSpan(
+                                            text: "${weatherData.country}",
+                                            style: TextStyle(fontSize: 11,color: Colors.white.withOpacity(0.4)),),
+                                        ],
+                                      )
                                   ),
                                   //weather icon
                                   BoxedIcon(
@@ -411,7 +449,7 @@ class _WeatherPageState extends State<WeatherPage> {
                                                   child: Text("${weatherData.feelsLike}°",style: TextStyle(fontSize: 14,color: Colors.white),),
                                                 ),
                                               ),
-                                              Text("$feelsDescription",style: TextStyle(fontSize: 10,color: Colors.white),),
+                                              Text("$feelsDescription",style: TextStyle(fontSize: 9,color: Colors.white),),
 
                                             ],
                                           ),

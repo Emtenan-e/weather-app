@@ -12,14 +12,14 @@ class WeatherService{
   // });
 
   //Riyadh default
-  late String weatherUrl = 'https://api.openweathermap.org/data/2.5/weather?q=Riyadh&APPID=YOURAPIKEY&units=metric';
+  late String weatherUrl = 'https://api.openweathermap.org/data/2.5/weather?q=Riyadh&APPID=6232c9b51ee06f1bfe635f864ac3dbe3&units=metric';
 
   //get data from weather service
   Future<WeatherData> getdata(String? city) async{
 
     print("بدا لاتصال بالشبكه هنا ");
 
-    weatherUrl = 'https://api.openweathermap.org/data/2.5/weather?q=$city&APPID=YOURAPIKEY&units=metric';
+    weatherUrl = 'https://api.openweathermap.org/data/2.5/weather?q=$city&APPID=6232c9b51ee06f1bfe635f864ac3dbe3&units=metric';
 
     //http to get
     final response = await http.get(Uri.parse(weatherUrl));

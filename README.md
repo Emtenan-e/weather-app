@@ -23,3 +23,10 @@ Depending on data from openweathermap.org this app:
 
 ## How to run
 - Create your own API key and add it to the project.
+
+## Screenshots
+
+![Search Screen](screenshots/search.gif)
+![Rainy Weather](screenshots/rainy.gif)
+![Snowy Weather](screenshots/snowy.gif)
+![Thunder Weather](screenshots/thunder.gif)
